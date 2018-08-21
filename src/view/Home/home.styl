@@ -1,0 +1,96 @@
+$searchBackound = #e5017d
+$pageIndexBackground = #fff
+.search_bar
+    height: 2.2rem
+    background: $searchBackound
+    line-height: @height
+    overflow hidden
+    .search_input
+        width: 100%
+        height: 1.3rem
+        border: none 
+        border-bottom: 1px solid $pageIndexBackground
+        background: $searchBackound
+        color: $pageIndexBackground
+    .location_img
+        padding-top:.2rem
+        padding-left: .3rem
+.swiper_bar
+    clear: both
+    height:9rem
+    overflow hidden
+    .swiper_Box
+        clear: @clear
+        height:@height
+        overflow @overflow
+.type_bar
+    background: $pageIndexBackground
+    margin: 0 .3rem .3rem .3rem
+    border-radius: .3rem
+    font-size: 14px
+    div
+        padding: .1rem
+        font-size: 12px
+        text-align: center
+.goodsList_bar
+    background: $pageIndexBackground
+    margin-top: .3rem
+    .goodsList_title
+        border-bottom: 1px solid #eee
+        font-size: 14px
+        color: $searchBackound
+        padding: .2rem
+    .goodsList_content
+        border-bottom: 1px solid #eeeeee
+    .goodsList_item
+        width: 99%
+        border-right: 1px solid #eee 
+        text-align: center
+        font-size: 12px
+.floor_title
+    border-bottom: 1px solid #eee
+    font-size: 14px
+    color: $searchBackound
+    padding: .2rem
+.floor_anomaly
+    width: 100%
+    display: flex
+    flex-direction: row
+    background: $pageIndexBackground
+    border-bottom: 1px solid #dddddd
+    div
+        width: 10rem
+        box-sizing: border-box
+        -webkit-box-sizing: border-box
+    .floor_one
+        border-right: @border-bottom
+    .floor_two
+        border-bottom: @border-bottom
+.floor_rule
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    background: $pageIndexBackground
+    div
+        flex:1
+        border-bottom: 1px solid #ddd 
+    :nth-child(odd)
+        border-left: 1px solid #ddd
+        box-sizing: border-box
+.floor_rule2
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+    background: $pageIndexBackground
+    div
+        width: 50%        
+.floor_ruleImg
+    background-size: 100%,100%
+    width: 100% 
+.hot-area
+    text-align: center
+    font-size:14px
+    height: 1.8rem
+    line-height:@height
+  
+
