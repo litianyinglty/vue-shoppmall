@@ -10,7 +10,7 @@ const mongoose = require('mongoose')
     await connect()
     initSchemas() // 载入模型
     const User = mongoose.model('User') // 数据表User
-    let addUser = new User({userName:'wudi',password:'123456'}) // 向user表中插入一条数据
+    let addUser = new User({userName:'wudi2',password:'123456'}) // 向user表中插入一条数据
     addUser.save().then(()=>{
         console.log('插入成功')
     })

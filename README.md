@@ -208,6 +208,35 @@
 
         })()
 
+## 8.使用bcryot加密处理  （跨平台加密工具）
+    1).安装  npm install --save bcrypt     
+
+    2).在user.js中引入 bcrypt    
+        const bcrypt = require('bcrypt')
+        const SALT_WORK_FACTOR = 10 //加盐位数       
+        
+    3).加盐加密处理      
+        userSchema.pre('save', function(next){ // 每次保存都加盐加密处理
+            bcrypt.genSalt(SALT_WORK_FACTOR,(err,salt)=>{ // 加盐 10位
+                if(err){
+                    return next(err)
+                }else{
+                    bcrypt.hash(this.password,salt,(err,hash)=>{ // 给密码加密
+                        if(err){
+                            return next(err)
+                        }else{
+                            this.password = hash 
+                            next() 
+                        }
+                    })
+                } 
+            }) 
+        })
+
+
+
+
+
     
 
 

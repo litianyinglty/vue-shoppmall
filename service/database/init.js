@@ -4,7 +4,6 @@ const glob = require('glob');
 const { resolve } = require('path')
 
 exports.initSchemas = () => { // 引入所有的模型
-    console.log("1")
     glob.sync(resolve(__dirname,'./schema','**/*.js')).forEach(require) // 同步引入，匹配所有的模型，并把相对路径转换为绝对路径
 }
 
