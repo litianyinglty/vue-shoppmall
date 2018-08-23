@@ -163,6 +163,56 @@
         await connect()
     })()
 
+## 7.schema建模    
+    <1>.在database下创建schema文件夹,创建user模型     
+        const mongoose = require('mongoose')
+        const Schema = mongoose.Schema  // 定义模型
+        let ObjectId = Schema.Types.ObjectId  // 定义模型的类型
+
+        // 创建UserChema模型
+        const userSchema = new Schema({
+            UserId: ObjectId, // Id类型
+            userName: {unique:true,type:String}, // 唯一值，string类型
+            password: String,
+            createDate: {type:Date,default:Date.now()}, // 注册日期  date类型，默认值
+            lastDate: {type:Date,default:Date.now()},  // 最后登录的时间
+        })
+
+        // 发布模型
+        mongoose.model('User',userSchema) //要和表名一致     
+    
+    <2>.载入userSchema模型    
+        1).在init.js中，引入global模块,用来获取匹配对应规则文件  resolve: 将相对路径转换为绝对路径  
+            const glob = require('glob')      
+            在service下， npm install --save glob
+        2).引入resolve     
+            const { resolve } = require('path')      
+        3).将所有的schema模型都引入进来       
+            exports.initSchemas = () => { // 引入所有的模型
+                glob.async(resolve(__dirname,'./schema','**/*.js')).forEach(require) 
+                // 同步引入，匹配所有的模型，并把相对路径转换为绝对路径
+            }     
+    <3>.在根目录index.js下操作数据库    
+        //引入connect
+        const { connect, initSchemas } = require('./database/init.js')
+        const mongoose = require('mongoose')
+
+        ;(async () =>{
+            await connect()
+            initSchemas() // 载入模型
+            const User = mongoose.model('User') // 数据表User
+            let addUser = new User({userName:'dujiang',password:'123456'}) // 向user表中插入一条数据
+            addUser.save().then(()=>{
+                console.log('插入成功')
+            })
+
+        })()
+
+    
+
+
+
+
 
 
 
