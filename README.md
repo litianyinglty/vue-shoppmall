@@ -259,6 +259,13 @@
         app.use(router.routes());// 加载路由中间件  
         app.use(router.allowedMethods())
 
+    <4>.安装koa-bodyparser 做中间件做post请求         
+        npm install --save koa-bodyparser        
+
+    <5>.安装koa2-cors 解决跨域      
+        npm install --save koa2-cors  
+
+
 
 
 

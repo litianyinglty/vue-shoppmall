@@ -164,6 +164,9 @@ export default {
     axios({
       url: url.getHomeGoodsInfo,
       method: "post",
+      data:{
+        username: '222'
+      }
     }).then(response=>{
       console.log(response)
        this.shopType = response.data.data.category; // 商品分类数据

@@ -23,13 +23,15 @@
             required
           />
           <div class="register_button">
-            <van-button type="primary" size="large">马上注册</van-button>
+            <van-button type="primary" size="large" @click="getRegisterData">马上注册</van-button>
           </div>
         </div>
     </div>
 </template>
 
 <script>
+import axios from 'axios';
+import url from '@/serviceAPI.config.js'
 export default {
   name: "Register",
   data() {
@@ -42,11 +44,25 @@ export default {
   methods: {
     goback() {
       this.$router.go(-1);
+    },
+    getRegisterData(){
+      axios({
+        url: url.registerUser,
+        method: 'post',
+        data: {
+          username: this.username,
+          password: this.password
+        },
+      }).then(response=>{
+        console.log(response)
+      }).catch((err)=>{
+        console.log(err)
+      })  
     }
   }
 };
 </script>
 
 <style scoped lang="stylus">
-  @import ('./register.styl');
+@import ('./register.styl');
 </style>
