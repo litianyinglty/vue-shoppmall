@@ -233,6 +233,34 @@
             }) 
         })
 
+## 9.使用koa-router模块化配置接口
+    <1>.安装 koa-router    
+        npm install --save koa-router   
+    
+    <2>.新建appApi文件夹统一放各个接口文件     
+        在user.js里写入   
+        const Router = require('koa-router');
+        let router = new Router();
+        router.get('/', async (ctx) => {
+            ctx.body = '这是用户操作首页'
+        })
+        router.get('/register', async (ctx) => {
+            ctx.body = '用户注册接口'
+        })
+        module.exports = router;     
+    
+    <3>.在index.js中写入   
+        const Router = require('koa-router');
+        let user = require('./appApi/user.js');
+        
+        let router = new Router(); // 装载所有子路由  
+        router.use('/user',user.routes());
+
+        app.use(router.routes());// 加载路由中间件  
+        app.use(router.allowedMethods())
+
+
+
 
 
 
