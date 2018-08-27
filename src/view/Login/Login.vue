@@ -1,12 +1,12 @@
 <template>
     <div>
         <van-nav-bar
-            title="注册"
+            title="用户登录"
             left-text="返回"
             left-arrow
             @click-left="goback"
         />
-        <div class="register_Box">
+        <div class="login_Box">
           <van-field
             v-model="username"
             label="用户名"
@@ -24,8 +24,8 @@
             required
             :error-message="passwordErrorMessage"
           />
-          <div class="register_button">
-            <van-button type="primary" size="large" @click="registerAllMethods" :loading="openLoading">马上注册</van-button>
+          <div class="login_button">
+            <van-button type="primary" size="large" @click="loginAllMethods" :loading="openLoading">登录</van-button>
           </div>
         </div>
     </div>
@@ -51,35 +51,25 @@ export default {
     goback() {
       this.$router.go(-1);
     },
-    registerAllMethods(){
-      this.checkForm() && this.getRegisterData()   // 如果this.checkForm()成功了，执行this.getRegisterData()
+    loginAllMethods(){
+      this.checkForm() && this.getloginData()   // 如果this.checkForm()成功了，执行this.getRegisterData()
       // if(this.checkForm()){
       //   this.getRegisterData()
       // }
     },
-    getRegisterData() {
+    getloginData() {
       this.openLoading = true;
       axios({
-        url: url.registerUser,
+        url: url.login,
         method: "post",
         data: {
           userName: this.username,
           password: this.password
         }
       }).then(response => {
-          console.log(response);
-          if (response.data.code == 200) {
-            Toast.success(response.data.message);
-            this.$router.push("/");
-          } else {
-            console.log(response.data.message);
-            this.openLoading = false;
-            Toast.fail("注册失败");
-          }
+          console.log(response)
         }).catch(error => {
-          console.log(error);
-          Toast.fail("注册失败");
-          this.openLoading = false;
+         
         });
     },
     // 表单验证 
@@ -104,5 +94,5 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-@import ('./register.styl');
+@import ('./login.styl');
 </style>

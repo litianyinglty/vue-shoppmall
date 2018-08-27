@@ -269,7 +269,86 @@
         npm install --save koa2-cors     
         使用方法：  
             const cors = require('koa2-cors');         
-            app.use(cors())      
+            app.use(cors())    
+    
+    <6>.在appApi下面的user.js写入    
+        router.post('/register', async (ctx) => {
+            const User = mongoose.model('User') // 把user表引过来
+            let newUser = new User(ctx.request.body) // 把前端输入的值插入到数据库
+
+            await newUser.save().then(()=>{
+                ctx.body = {
+                    code: 200,
+                    message: '注册成功'
+                }
+            }).catch((error)=>{
+                ctx.body = {
+                    code: 500,
+                    message: error
+                }
+            })
+        })      
+
+    <7>.在index.js中写入：    
+        ;(async ()=>{
+            await connect()
+            initSchemas()
+        })()      
+    
+    <8>.注册的防重复提交  设置异步loading状态   
+
+    <9>.注册的表单验证       
+
+    <10>.登录的后端逻辑，对比密码和用户名    
+        1).在schema的User.js里写入：
+            userSchema.methods = { // 实例方法
+                comparePassword: (_password,password)=>{ // 对比密码，第一个参数是前端传入的，第二个是数据库里的
+                    return new Promise((resolve,reject)=>{
+                        bcrypt.compare(_password,password,(err,isMatch)=>{// bcrypt对比密码
+                            if(err){
+                                reject(err)
+                            }else{
+                                resolve(isMatch)
+                            }
+                        })
+                    })
+                }
+            }    
+        2).在appAPI的user.js里写入:    
+            router.post('/login', async (ctx) => {
+            let loginUser = ctx.request.body // 获取前端传入的值
+            console.log(loginUser)
+            let username = loginUser.userName
+            let password = loginUser.password
+
+            // 引入User的model
+            const User = mongoose.model('User')
+
+            await User.findOne({ userName: username }).exec().then(async (result) => { // 查找一条数据
+                console.log(result)
+                if(result){
+                    let newUser = new User() // 实例化,方便调用schema里的user.js里的comparePassword方法
+                    await newUser.comparePassword(password,result.code) // 第一个参数为前端传入，第二个为数据库返回的值
+                    .then(isMatch=>{ // 对比成功后返回的值
+                        ctx.body = {
+                            code:200,
+                            message: isMatch
+                        }
+                    }).catch(error=>{
+                        console.log(error)
+                        ctx.body={code:500,message:error}
+                    })
+                }else{
+                    ctx.body = {
+                        code: 500,
+                        message: '用户名不存在'
+                    }
+                }
+            })
+        })
+
+
+
 
 
 
