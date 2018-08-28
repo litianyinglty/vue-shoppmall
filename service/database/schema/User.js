@@ -37,7 +37,7 @@ userSchema.pre('save', function (next) { // 每次保存都加盐加密处理
 userSchema.methods = { // 实例方法
     comparePassword: (_password,password)=>{ // 对比密码，第一个参数是前端传入的，第二个是数据库里的
         return new Promise((resolve,reject)=>{
-            bcrypt.compare(_password,password,(err,isMatch)=>{// bcrypt对比密码
+            bcrypt.compare(_password,password,(err,isMatch)=>{// bcrypt对比密码 isMatch是比对结果
                 if(err){
                     reject(err)
                 }else{

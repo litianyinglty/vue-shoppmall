@@ -36,10 +36,9 @@ import axios from "axios";
 import url from "@/serviceAPI.config.js";
 import { Toast } from "vant";
 export default {
-  name: "Register",
+  name: "Login",
   data() {
     return {
-      msg: "hello",
       username: "",
       password: "",
       openLoading: false, // 是否开启用户注册的loading状态
@@ -47,12 +46,18 @@ export default {
       passwordErrorMessage: ""
     };
   },
+  created(){
+    if(localStorage.userMessage){
+      Toast.success('你已经登录过了')
+      this.$router.push('/')
+    }
+  },
   methods: {
     goback() {
       this.$router.go(-1);
     },
-    loginAllMethods(){
-      this.checkForm() && this.getloginData()   // 如果this.checkForm()成功了，执行this.getRegisterData()
+    loginAllMethods() {
+      this.checkForm() && this.getloginData(); // 如果this.checkForm()成功了，执行this.getRegisterData()
       // if(this.checkForm()){
       //   this.getRegisterData()
       // }
@@ -66,26 +71,43 @@ export default {
           userName: this.username,
           password: this.password
         }
-      }).then(response => {
-          console.log(response)
-        }).catch(error => {
-         
+      })
+        .then(response => {
+          if (response.data.code === 200 && response.data.message) {
+            new Promise((resolve, reject) => {
+              localStorage.userMessage = { userName: this.username };
+              setTimeout(()=>{resolve()},500)
+            }).then(()=>{
+              Toast.success("登录成功");
+              this.$router.push("/");
+            }).catch(err=>{
+              Toast.fail('登录状态保存失败')
+              console.log(error)
+            }) 
+          } else {
+            Toast.fail("登录失败");
+            this.openLoading = false;
+          }
+        })
+        .catch(error => {
+          Toast.fail("登录失败");
+          this.openLoading = false;
         });
     },
-    // 表单验证 
-    checkForm(){
-      let isok = true
-      if(this.username.length<5){
-        this.userNameErrorMessage = '用户名不能小于5位'
-        isok = false
-      }else{
-          this.userNameErrorMessage = ''
+    // 表单验证
+    checkForm() {
+      let isok = true;
+      if (this.username.length < 5) {
+        this.userNameErrorMessage = "用户名不能小于5位";
+        isok = false;
+      } else {
+        this.userNameErrorMessage = "";
       }
-      if(this.password.length<6){
-        this.passwordErrorMessage = '密码不能小于6位'
-        isok = false
-      }else{
-        this.passwordErrorMessage = '密码不能小于6位'
+      if (this.password.length < 6) {
+        this.passwordErrorMessage = "密码不能小于6位";
+        isok = false;
+      } else {
+        this.passwordErrorMessage = "";
       }
       return isok;
     }
