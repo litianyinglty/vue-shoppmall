@@ -347,7 +347,95 @@
                 })
             })
     
-    <11>.前端登录逻辑操作      
+    <11>.商品数据的提纯  
+        1).原始文件在data_json下的goods.json，新建fsJSON.js，并写入：
+        const fs = require('fs');
+        fs.readFile('./data_json/goods.json','utf8',function(err,data){ // 读取goods.json文件，转换为utf-8格式
+            let newData = JSON.parse(data) // 将读取的数据转换为对象
+            let pushData = [] // 提纯放入的数据
+            let i = 0; //记录提纯的条数
+            newData.RECORDS.map(function(value,index){ // 遍历goods.json
+                if(value.IMAGE1 !=null){
+                    i++;
+                    console.log(value.NAME)
+                    pushData.push(value)
+                }
+            })
+            console.log(i)
+            fs.writeFile('./realGoods.json',JSON.stringify(pushData),function(err){ // 写入文件到realGoods.json
+                if(err){
+                    console.log('写文件操作失败')
+                }else{
+                    console.log('写文件操作成功')
+                }
+            })
+        })
+
+    <12>.将提纯的realGoods.json数据插入到mongdb数据库  
+        1).在schema文件夹下创建Goods.js并写入：
+            const mongoose = require('mongoose');
+            const Schema = mongoose.Schema;
+
+            const goodsSchema = new Schema({
+                ID:{unique:true,type:String},
+                GOODS_SERIAL_NUMBER:String,
+                SHOP_ID:String,
+                SUB_ID:String,
+                GOOD_TYPE:Number,
+                STATE:Number,
+                NAME:String,
+                ORI_PRICE:Number,
+                PRESENT_PRICE:Number,
+                AMOUNT:Number,
+                DETAIL:String,
+                BRIEF:String,
+                SALES_COUNT:Number,
+                IMAGE1:String,
+                IMAGE2:String,
+                IMAGE3:String,
+                IMAGE4:String,
+                IMAGE5:String,
+                ORIGIN_PLACE:String,
+                GOOD_SCENT:String,
+                CREATE_TIME:String,
+                UPDATE_TIME:String,
+                IS_RECOMMEND:Number,
+                PICTURE_COMPERSS_PATH:String
+            },{
+                collection: 'Goods'
+            })
+            mongoose.model('Goods',goodsSchema)
+        
+        2).在appAPI文件夹下，创建goods.js，并写入： 
+            const Router = require('koa-router');
+            let router = new Router();
+            const mongoose = require('mongoose');
+            const fs = require('fs');
+
+            router.get('/insertAllGoodsInfo',async(ctx)=>{
+                fs.readFile('./realGoods.json','utf8',(err,data)=>{ // 读取realGoods.json 因为要放到index.js里，所以路径为相对index.js的路径
+                    data = JSON.parse(data) //将读取到的数据转换为对象
+                    let saveCount = 0 //用来计算插入到数据库有多少条
+                    const Goods = mongoose.model('Goods')
+                    data.map((value,index)=>{
+                        console.log(value)
+                        let newGoods = new Goods(value) // 插入到Goods表中
+                        newGoods.save().then(()=>{ //保存
+                            saveCount++;
+                            console.log('成功'+saveCount)
+                        }).catch(error=>{
+                            console.log(error)
+                        })
+                    })
+                })
+                ctx.body = "开始导入数据"
+            })
+            module.exports = router    
+
+        3).在index.js中写入: 
+            let goods = require('./appApi/goods.js');   
+            router.use('/goods',goods.routes());
+
         
 
 
