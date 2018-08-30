@@ -434,7 +434,33 @@
 
         3).在index.js中写入: 
             let goods = require('./appApi/goods.js');   
-            router.use('/goods',goods.routes());
+            router.use('/goods',goods.routes());    
+    
+    <13>.读取插入商品大类(category)和商品小类(smalltype)     
+
+    <14>.编写商品详情接口    
+        1).在appAPI的goods.js里写入：     
+            router.post('/getDetailGoodsInfo', async (ctx) => {
+                let goodsId = ctx.request.body.goodsId
+                console.log(goodsId)
+                const Goods = mongoose.model('Goods')
+                await Goods.findOne({ ID: goodsId }).exec().then(async (result) => { // 查找数据库里的数据
+                    console.log("成功" + result)
+                    ctx.body = { code: 200, message: result }
+                }).catch(err => {
+                    console.log("失败" + err)
+                    ctx.body = { code: 500, message: err }
+                })
+            })    
+
+        2).在serviceAPI.config.js里配置路径     
+            gooodsDetail: localUrl + "goods/getDetailGoodsInfo"    
+
+        3).在Home.vue里写入goGoodsDetail()方法，并向GoodsDetail.vue里传递goodsId参数 (使用query)
+            this.$router.push({name:'GoodsDetail',query:{goodsId:code}})    
+
+        4).在GoodsDetail.vue里接收传过来的参数： (使用this.$route.query)   
+            this.goodsId = this.$route.query.goodsId
 
         
 

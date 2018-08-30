@@ -3,7 +3,8 @@ const localUrl = 'http://localhost:3000/'
 const url = {
     getHomeGoodsInfo : baseUrl + "gooods", // 商城首页信息
     registerUser: localUrl + "user/register", // 注册
-    login: localUrl + "user/login"
+    login: localUrl + "user/login",
+    gooodsDetail: localUrl + "goods/getDetailGoodsInfo"
 }
 
 module.exports = url;

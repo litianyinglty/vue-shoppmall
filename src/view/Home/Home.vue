@@ -103,7 +103,7 @@
               <van-row>
                 <van-col span="12" v-for="(item,index) in hotGoods" :key="index">
                   <!-- <goods-info :goodsImg="item.image" :goodsName="item.name" :goodsPrice="item.price"></goods-info> -->
-                  <div class="goods-info">
+                  <div class="goods-info" @click="goGoodsDetail(item.goodsId)">
                     <div class="goods-image">
                         <img v-lazy="item.image" width="90%" />
                     </div>
@@ -121,72 +121,82 @@
 <script>
 import axios from "axios";
 import mockdata from "../../mock/mock.js";
-import 'swiper/dist/css/swiper.css';
-import { swiper, swiperSlide } from 'vue-awesome-swiper' // 滑动组件
-import { newMoney } from '@/utils/moneyFillter.js'   // 金额过滤器
-import url from "@/serviceAPI.config.js"
+import "swiper/dist/css/swiper.css";
+import { swiper, swiperSlide } from "vue-awesome-swiper"; // 滑动组件
+import { newMoney } from "@/utils/moneyFillter.js"; // 金额过滤器
+import url from "@/serviceAPI.config.js";
 export default {
   name: "Home",
   data() {
     return {
-      swiperOption:{
-        slidesPerView:5
+      swiperOption: {
+        slidesPerView: 5
       },
-      swiperOption1:{
-        slidesPerView:3
+      swiperOption1: {
+        slidesPerView: 3
       },
       locationImg: require("../../assets/image/location.png"),
       // 图片已经放到了本地的assets/image里，防止图片丢失
-      bannerImg:[],
-      shopType:[],
+      bannerImg: [],
+      shopType: [],
       advertesPicture: "",
-      goodsList:[],
-      floor1:[],
-      floor1_0:{},
-      floor1_1:{},
-      floor1_2:{},
+      goodsList: [],
+      floor1: [],
+      floor1_0: {},
+      floor1_1: {},
+      floor1_2: {},
       floor2: [],
       floor3: [],
       hotGoods: []
     };
   },
-  filters:{ // 过滤器
-    moneyFillter(code){
-      return newMoney(code)
+  filters: {
+    // 过滤器
+    moneyFillter(code) {
+      return newMoney(code);
     }
   },
-  components:{
+  components: {
     swiper,
-    swiperSlide,
+    swiperSlide
     // goodsInfo
   },
-  created(){
+  created() {
     axios({
       url: url.getHomeGoodsInfo,
       method: "post",
-      data:{
-        username: '222'
+      data: {
+        username: "222"
       }
-    }).then(response=>{
-      console.log(response)
-       this.shopType = response.data.data.category; // 商品分类数据
-       this.advertesPicture = response.data.data.advertesPicture.PICTURE_ADDRESS; // 广告区域数据
-       this.bannerImg = response.data.data.slides;  //轮播图数据
-       this.goodsList = response.data.data.recommend // 商品推荐数据
-       this.floor1 = response.data.data.floor1 // 楼层页面
-       this.floor2 = response.data.data.floor2 // 楼层页面
-       this.floor3 = response.data.data.floor3 // 楼层页面
-       this.floor1_0 = this.floor1[0]
-       this.floor1_1 = this.floor1[1]
-       this.floor1_2 = this.floor1[2]
-       this.hotGoods = response.data.data.hotGoods
-    }).catch(error=>{
-      console.log(error)
     })
+      .then(response => {
+        console.log(response);
+        this.shopType = response.data.data.category; // 商品分类数据
+        this.advertesPicture =
+          response.data.data.advertesPicture.PICTURE_ADDRESS; // 广告区域数据
+        this.bannerImg = response.data.data.slides; //轮播图数据
+        this.goodsList = response.data.data.recommend; // 商品推荐数据
+        this.floor1 = response.data.data.floor1; // 楼层页面
+        this.floor2 = response.data.data.floor2; // 楼层页面
+        this.floor3 = response.data.data.floor3; // 楼层页面
+        this.floor1_0 = this.floor1[0];
+        this.floor1_1 = this.floor1[1];
+        this.floor1_2 = this.floor1[2];
+        this.hotGoods = response.data.data.hotGoods;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
+  methods: {
+    goGoodsDetail(code) {
+      // 跳转到详情页面
+      this.$router.push({name:'GoodsDetail',query:{goodsId:code}})
+    }
   }
 };
 </script>
 
 <style scoped lang="stylus">
-  @import "./home.styl"
+@import './home.styl';
 </style>
