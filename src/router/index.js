@@ -4,6 +4,7 @@ import Home from '@/view/Home/Home'
 import Register from '@/view/Register/Register'
 import Login from '@/view/Login/Login'
 import GoodsDetail from '@/view/GoodsDetail/GoodsDetail'
+import CategoryList from '@/view/CategoryList/CategoryList'
 
 Vue.use(Router)
 
@@ -18,6 +19,11 @@ export default new Router({
       path: '/goodsdetail',
       name: 'GoodsDetail',
       component: GoodsDetail
+    },
+    {
+      path: '/categorylist',
+      name: 'CategoryList',
+      component: CategoryList
     },
     {
       path: '/register',

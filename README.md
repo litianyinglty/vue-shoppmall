@@ -481,6 +481,71 @@
     <3>.加入滑动切换和吸顶效果    
         1)滑动   在van-tabs里加入属性 swipeable
         2)吸顶   在van-tabs里加入属性 sticky   
+
+## 11.商品大类接口编写   
+    在appAPI下的goods.js下  写入
+        router.get('/getCategoryList',async(ctx)=>{
+            try{
+                const Category = mongoose.model('Category'); // 引入商品大类模型
+                let result = await Category.find().exec(); //查找数据库
+                ctx.body = { code: 200, message: result }
+            }catch(err){
+                ctx.body = { code: 500, message: err }
+            }
+        })    
+    
+## 12.商品大类页面注意事项：  
+    <1>.高度撑开页面，操作dom   
+        在mounted中写入   
+                mounted() {
+                let windowHeight = document.documentElement.clientHeight // 获取窗口高度
+                console.log(windowHeight)
+                document.getElementById("menu").style.height= windowHeight-46 +'px' // 将高度撑开
+            },
+
+    <2>.大类点击绑定class   
+        1). 在data里定义一个索引  categoryIndex: 0   
+        2).点击写入方法activeCategory      
+            <li v-for="(item,index) in category" :key="item._id" @click="activeCategory(index)" :class="{categoryActive:categoryIndex===index}">{{item.MALL_CATEGORY_NAME}}</li>
+
+            activeCategory(index){
+                this.categoryIndex = index 
+            }
+        3).定义样式   
+            .categoryActive
+                background: #fff     
+        4).绑定class    让定义的索引等于index
+            :class="{categoryActive:categoryIndex===index}"
+
+## 13.商品小类接口编写
+    router.get('/getSmallTypeList',async(ctx)=>{
+        try{
+            let categoryId = "1"
+            const SmallType = mongoose.model('SmallType'); // 引入商品小类模型
+            let result = await SmallType.find({MALL_CATEGORY_ID:categoryId}).exec(); //查找数据库
+            ctx.body = { code: 200, message: result }
+        }catch(err){
+            ctx.body = { code: 500, message: err }
+        }
+    })
+
+## 14.解决分类列表的bug
+    <1>.小类切换时，不是默认加载第一个  
+        解决办法: 
+            在小类调接口获取值的时候，将索引值设为0
+            if (res.data.code === 200 && res.data.message) {
+                this.smallType = res.data.message;
+                this.active = 0; // 切换页面还原成0  不还原的话，每次选中再切换大类点击的时候不是第一个被选中
+            }
+    
+    <2>.初始加载时，小类没有出现
+        解决办法:
+            在大类调接口获取值时，调小类的接口，传递查询小类的id 
+            if (res.data.code === 200 && res.data.message) {
+                this.category = res.data.message;
+                this.getSmallTypeByCategoryID(this.category[0].ID) // 解决一开始出来第一个大类没有展示小类的bug
+            }  
+
        
     
 

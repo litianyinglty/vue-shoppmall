@@ -3,6 +3,7 @@ let router = new Router();
 const mongoose = require('mongoose');
 const fs = require('fs');
 
+// 商品详情数据存入数据库
 router.get('/insertAllGoodsInfo', async (ctx) => {
     fs.readFile('./realGoods.json', 'utf8', (err, data) => { // 读取realGoods.json 因为要放到index.js里，所以路径为相对index.js的路径
         data = JSON.parse(data) //将读取到的数据转换为对象
@@ -22,6 +23,7 @@ router.get('/insertAllGoodsInfo', async (ctx) => {
     ctx.body = "开始导入数据"
 })
 
+// 商品大类存入数据库
 router.get('/category', async (ctx) => { // 商品大类
     fs.readFile('./data_json/category.json', 'utf8', (err, data) => {
         let newData = JSON.parse(data);
@@ -41,7 +43,8 @@ router.get('/category', async (ctx) => { // 商品大类
     ctx.body = '开始导入数据'
 })
 
-router.get('/type', async (ctx) => {
+// 商品小类存入数据库
+router.get('/type', async (ctx) => { 
     fs.readFile('./data_json/category_sub.json', 'utf8', (err, data) => {
         const newData = JSON.parse(data);
         const SmallType = mongoose.model('SmallType');
@@ -60,10 +63,12 @@ router.get('/type', async (ctx) => {
     ctx.body = '开始导入数据'
 })
 
-router.post('/getDetailGoodsInfo', async (ctx) => {
+
+// 获取商品详情接口
+router.post('/getDetailGoodsInfo', async (ctx) => { 
     let goodsId = ctx.request.body.goodsId
     console.log(goodsId)
-    const Goods = mongoose.model('Goods')
+    const Goods = mongoose.model('Goods') // 引入商品详情模型
     await Goods.findOne({ ID: goodsId }).exec().then(async (result) => { // 查找数据库里的数据
         console.log("成功" + result)
         ctx.body = { code: 200, message: result }
@@ -71,6 +76,42 @@ router.post('/getDetailGoodsInfo', async (ctx) => {
         console.log("失败" + err)
         ctx.body = { code: 500, message: err }
     })
+})
+
+// 商品大类接口
+router.get('/getCategoryList',async(ctx)=>{
+    try{
+        const Category = mongoose.model('Category'); // 引入商品大类模型
+        let result = await Category.find().exec(); //查找数据库
+        ctx.body = { code: 200, message: result }
+    }catch(err){
+        ctx.body = { code: 500, message: err }
+    }
+})
+
+// 商品小类接口
+router.post('/getSmallTypeList',async(ctx)=>{
+    try{
+        // let categoryId = "1"
+        let categoryId = ctx.request.body.categoryId; // 前端传入的categoryId
+        const SmallType = mongoose.model('SmallType'); // 引入商品小类模型
+        let result = await SmallType.find({MALL_CATEGORY_ID:categoryId}).exec(); //查找数据库
+        ctx.body = { code: 200, message: result }
+    }catch(err){
+        ctx.body = { code: 500, message: err }
+    }
+})
+
+// 根据类别获取商品列表
+router.get('/getGoodsListBySmallTypeId',async(ctx)=>{
+    try{
+        let categoryId = "2c9f6c946016ea9b016016f79c8e0000"
+        const Goods = mongoose.model('Goods'); // 引入商品详情模型
+        let result = await Goods.find({SUB_ID:categoryId}).exec(); //查找数据库
+        ctx.body = { code: 200, message: result }
+    }catch(err){
+        ctx.body = { code: 500, message: err }
+    }
 })
 
 module.exports = router
