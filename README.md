@@ -461,6 +461,31 @@
 
         4).在GoodsDetail.vue里接收传过来的参数： (使用this.$route.query)   
             this.goodsId = this.$route.query.goodsId
+    
+## 10.商品详情页面     
+    <1>.使用fillter过滤价格   
+        页面上：    
+            <div class="goods-price">价格：{{goodsInfo.PRESENT_PRICE | moneyFillter}}</div>    
+        js：    
+            import { newMoney } from "@/utils/moneyFillter.js";
+
+            filters: {
+                moneyFillter(num) {
+                return newMoney(num);
+                }
+            },  
+
+    <2>.解决图片中间有缝隙的bug    
+            在图片加入样式  font-size:0     
+
+    <3>.加入滑动切换和吸顶效果    
+        1)滑动   在van-tabs里加入属性 swipeable
+        2)吸顶   在van-tabs里加入属性 sticky   
+       
+    
+
+
+
 
         
 
