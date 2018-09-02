@@ -102,12 +102,16 @@ router.post('/getSmallTypeList',async(ctx)=>{
     }
 })
 
-// 根据类别获取商品列表
-router.get('/getGoodsListBySmallTypeId',async(ctx)=>{
+router.post('/getGoodsListBySmallTypeId',async(ctx)=>{ // 根据小类查商品
     try{
-        let categoryId = "2c9f6c946016ea9b016016f79c8e0000"
+        let smallTypeId = ctx.request.body.smallTypeId // 前端传入的id
+        let pageNo = ctx.request.body.pageNo // 当前页数
+        let pageNum = ctx.request.body.pageNum // 每页显示数量  
+        let start = (pageNo -1)*num // 开始位置
+        console.log(ctx.request.body)
         const Goods = mongoose.model('Goods'); // 引入商品详情模型
-        let result = await Goods.find({SUB_ID:categoryId}).exec(); //查找数据库
+        let result = await Goods.find({SUB_ID:smallTypeId})
+        .skip(start).limit(pageNum).exec(); //查找数据库  skip()是跳过数  limit()限制每页多少
         ctx.body = { code: 200, message: result }
     }catch(err){
         ctx.body = { code: 500, message: err }

@@ -546,8 +546,98 @@
                 this.getSmallTypeByCategoryID(this.category[0].ID) // 解决一开始出来第一个大类没有展示小类的bug
             }  
 
-       
+##  15.商品类别页面上拉加载效果  
+    <1>.在main.js中引入List
     
+    <2>.在data里写入3个属性
+        loading: false, // 上拉加载时，为false可以上拉加载,true不行
+        finished: false, // 上拉加载时,是否有数据
+        list: [] // 商品数据
+
+    <3>.页面逻辑   
+        <van-list v-model="loading" :finished="finished" @load="upLoad">
+            <div class="list-item" v-for="(item,index) in list" :key="index">
+                {{item}}
+            </div>
+        </van-list>
+
+        upLoad() { // 上拉加载
+            setTimeout(() => {
+                for (let i = 0; i < 10; i++) {
+                    this.list.push(this.list.length+1)
+                }
+                this.loading = false
+                if(this.list.length>=40){
+                    this.finished = true // 没有数据了
+                }
+            }, 500);
+        }
+
+## 16.下拉刷新效果   
+    <1>.在main.js中引入PullRefresh  
+        import { PullRefresh } from 'vant'    
+        Vue.use(PullRefresh)
+    
+    <2>.在data里写入
+        isRefresh: false, // 下拉刷新       
+
+    <3>.页面逻辑，哪个要刷新，就包裹哪个元素（van-list）
+        <van-pull-refresh v-model="isRefresh" @refresh="downRefresh">
+            <van-list v-model="loading" :finished="finished" @load="upLoad">
+                <div class="list-item" v-for="(item,index) in list" :key="index">
+                    {{item}}
+                </div>
+            </van-list>
+        </van-pull-refresh>     
+
+    <4>.js逻辑    
+        downRefresh(){ // 下拉刷新
+            setTimeout(()=>{ // 设置延时器是为了防止一直刷新
+                this.isRefresh = false
+                this.list = [] // 清空list重新刷新
+                this.list.upLoad()
+            },500)
+        }
+
+    <5>.刷新时，数据没了的bug   
+        解决办法: 
+            之前调upLoad()时，把 this.finished = true // 没有数据了
+            只需要加上this.finished = false
+            downRefresh(){ // 下拉刷新
+                setTimeout(()=>{
+                    this.isRefresh = false
+                    this.list = [] 
+                    this.finished = false
+                    this.upLoad()
+                },500)
+            }
+
+## 17.后端分页   
+    <1>.接收前端传入的pageNo,pageNumber和子类id    
+        let categorySubId = ctx.request.body.categorySubId // 前端传入的id
+        let pageNo = ctx.request.body.pageNo // 当前页数
+        let pageNumber = 10 // 每页显示数量  
+        let start = (pageNo -1)*num // 开始位置
+
+    <2>.使用skip(start)  //跳过的页数  再使用limit(pageNumber) // 限制每页的条数
+
+    <3>完整代码如下：  
+        router.post('/getGoodsListBySmallTypeId',async(ctx)=>{ // 根据小类查商品
+            try{
+                let categorySubId = ctx.request.body.categorySubId // 前端传入的id
+                let pageNo = ctx.request.body.pageNo // 当前页数
+                let pageNumber = 10 // 每页显示数量  
+                let start = (pageNo -1)*num // 开始位置
+
+                const Goods = mongoose.model('Goods'); // 引入商品详情模型
+                let result = await Goods.find({SUB_ID:categorySubId})
+                .skip(start).limit(pageNumber).exec(); //查找数据库  skip()是跳过数  limit()限制每页多少
+                ctx.body = { code: 200, message: result }
+            }catch(err){
+                ctx.body = { code: 500, message: err }
+            }
+        })
+
 
 
 

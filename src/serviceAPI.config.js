@@ -7,6 +7,7 @@ const url = {
     gooodsDetail: localUrl + "goods/getDetailGoodsInfo", // 商品详情
     categoryList: localUrl + "goods/getCategoryList", // 商品大类
     smallTypeList: localUrl + "goods/getSmallTypeList", // 商品小类
+    getGoodsListBySmallTypeId: localUrl + "goods/getGoodsListBySmallTypeId" // 小类商品信息
 }
 
 module.exports = url;
