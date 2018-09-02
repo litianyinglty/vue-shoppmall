@@ -624,20 +624,23 @@
     <3>完整代码如下：  
         router.post('/getGoodsListBySmallTypeId',async(ctx)=>{ // 根据小类查商品
             try{
-                let categorySubId = ctx.request.body.categorySubId // 前端传入的id
+                let smallTypeId = ctx.request.body.smallTypeId // 前端传入的id
                 let pageNo = ctx.request.body.pageNo // 当前页数
-                let pageNumber = 10 // 每页显示数量  
-                let start = (pageNo -1)*num // 开始位置
-
+                let pageNum = ctx.request.body.pageNum // 每页显示数量  
+                let start = (pageNo -1)*pageNum // 开始位置
                 const Goods = mongoose.model('Goods'); // 引入商品详情模型
-                let result = await Goods.find({SUB_ID:categorySubId})
-                .skip(start).limit(pageNumber).exec(); //查找数据库  skip()是跳过数  limit()限制每页多少
+                let result = await Goods.find({SUB_ID:smallTypeId}).skip(start).limit(pageNum).exec(); //查找数据库  skip()是跳过数  limit()限制每页多少
                 ctx.body = { code: 200, message: result }
             }catch(err){
                 ctx.body = { code: 500, message: err }
             }
         })
 
+## 18.解决分类列表页面，一开始加载时，没有列表
+        解决办法： 
+            在大类调小类接口时，取到第一条小类的id，执行upload方法渲染  
+                this.smallTypeId = this.smallType[0].ID
+                this.upLoad()
 
 
 

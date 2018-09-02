@@ -107,11 +107,9 @@ router.post('/getGoodsListBySmallTypeId',async(ctx)=>{ // 根据小类查商品
         let smallTypeId = ctx.request.body.smallTypeId // 前端传入的id
         let pageNo = ctx.request.body.pageNo // 当前页数
         let pageNum = ctx.request.body.pageNum // 每页显示数量  
-        let start = (pageNo -1)*num // 开始位置
-        console.log(ctx.request.body)
+        let start = (pageNo -1)*pageNum // 开始位置
         const Goods = mongoose.model('Goods'); // 引入商品详情模型
-        let result = await Goods.find({SUB_ID:smallTypeId})
-        .skip(start).limit(pageNum).exec(); //查找数据库  skip()是跳过数  limit()限制每页多少
+        let result = await Goods.find({SUB_ID:smallTypeId}).skip(start).limit(pageNum).exec(); //查找数据库  skip()是跳过数  limit()限制每页多少
         ctx.body = { code: 200, message: result }
     }catch(err){
         ctx.body = { code: 500, message: err }
