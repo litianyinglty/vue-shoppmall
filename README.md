@@ -693,7 +693,16 @@
                 Toast.success('已有此商品')
             }
             this.$router.push({name:'Cart'})
-        }
+        }   
+    
+    <4>.购物车清空   
+        在cart.vue中，js里写入方法： 
+            clearCart(){ // 清空购物车
+                localStorage.removeItem('cartInfo')
+                this.cartInfo = []
+            }    
+
+    <5>.商品价格的计算
 
 
 
