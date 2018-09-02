@@ -652,6 +652,49 @@
         <img :src="item.IMAGE1" width="100%" :onerror="errorImg"/>
 
 
+## 20.类别页面跳转到商品详情  
+    代码如下: 
+        goGoodsInfo(id) { // 跳转到详情页
+            this.$router.push({ name: "GoodsDetail", query: { goodsId: id } });
+        }
+
+## 21.购物车页面   
+    <1>.在data里定义  
+        cartInfo: [], // 购物车数据
+        isempty: false // 购物车是否为空     
+    
+    <2>.在js里写入   
+        getCartInfo() { // 购物车信息
+            if (localStorage.cartInfo) {
+                this.cartInfo = JSON.parse(localStorage.cartInfo); // 获取本地缓存数据
+            }
+            console.log("this.cartInfo:"+JSON.stringify(this.cartInfo))
+            this.isempty = this.cartInfo.length > 0 ? true : false;
+        }   
+    
+    <3>.在GoodsDetail.vue中，写入点击进入购物车的逻辑   
+        addGoodsToCart(){ // 添加商品到购物车
+            // 取出本地购物车中的数据   
+            let cartInfo = localStorage.cartInfo ? JSON.parse(localStorage.cartInfo) : []
+            let isHaveGoods = cartInfo.find(cart=>cart.goodsId === this.goodsId) // 查找cartInfo里的goodsId
+            console.log("111"+isHaveGoods)
+            if(!isHaveGoods){ // 如果没有，就新添加
+                let newGoodsInfo = {
+                    goodsId: this.goodsInfo.ID,
+                    name: this.goodsInfo.NAME,
+                    price: this.goodsInfo.PRESENT_PRICE,
+                    image: this.goodsInfo.IMAGE1,
+                    count: 1
+                }
+                cartInfo.push(newGoodsInfo) //添加到cartInfo  
+                localStorage.cartInfo = JSON.stringify(cartInfo) // 保存到localstorage
+                Toast.success('添加成功')
+            }else{
+                Toast.success('已有此商品')
+            }
+            this.$router.push({name:'Cart'})
+        }
+
 
 
 

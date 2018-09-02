@@ -5,33 +5,39 @@ import Register from '@/view/Register/Register'
 import Login from '@/view/Login/Login'
 import GoodsDetail from '@/view/GoodsDetail/GoodsDetail'
 import CategoryList from '@/view/CategoryList/CategoryList'
+import Cart from '@/view/Cart/Cart'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/', // 首页
       name: 'Home',
       component: Home
     },
     {
-      path: '/goodsdetail',
+      path: '/goodsdetail', // 详情
       name: 'GoodsDetail',
       component: GoodsDetail
     },
     {
-      path: '/categorylist',
+      path: '/categorylist', // 分类列表
       name: 'CategoryList',
       component: CategoryList
     },
     {
-      path: '/register',
+      path: '/cart', // 分类列表
+      name: 'Cart',
+      component: Cart
+    },
+    {
+      path: '/register', // 注册
       name: 'Register',
       component: Register
     },
     {
-      path: '/login',
+      path: '/login', // 登录
       name: 'Login',
       component: Login
     }
