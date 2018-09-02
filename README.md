@@ -640,7 +640,18 @@
         解决办法： 
             在大类调小类接口时，取到第一条小类的id，执行upload方法渲染  
                 this.smallTypeId = this.smallType[0].ID
-                this.upLoad()
+                this.upLoad()  
+
+## 19.设置替补图片来代替找不到的图片  
+    <1>.制作一个图片errorimg.png,放到 src/assets/image下    
+
+    <2>.在data里，定义errorimg属性    
+        errorImg:'this.src="' + require('@/assets/image/errorimg.png') + '"'    
+
+    <3>.在页面中绑定onerror方法，写入:    
+        <img :src="item.IMAGE1" width="100%" :onerror="errorImg"/>
+
+
 
 
 

@@ -28,7 +28,7 @@
                         <van-list v-model="loading" :finished="finished" @load="upLoad">
                           <div class="list-item" v-for="(item,index) in goodsList" :key="index">
                             <div class="list-item-img">
-                              <img :src="item.IMAGE1" width="100%" />
+                              <img :src="item.IMAGE1" width="100%" :onerror="errorImg"/>
                             </div>
                             <div class="list-item-text">
                               <div>{{item.NAME}}</div>
@@ -63,6 +63,7 @@ export default {
       pageNum: 10,
       goodsList: [], // 商品信息
       smallTypeId: '', // 小类id
+      errorImg:'this.src="' + require('@/assets/image/errorimg.png') + '"'
     };
   },
   created() {
@@ -166,7 +167,7 @@ export default {
         alert(err)
       })
     },
-    onClickSmallType(index,title){
+    onClickSmallType(index,title){ // 点击触发渲染列表
       this.smallTypeId = this.smallType[index].ID
       console.log(this.smallTypeId)
       // 初始化
