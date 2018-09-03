@@ -1,3 +1,5 @@
+
+
 # 运行与打包     
   npm install   
   npm run dev    
@@ -5,6 +7,13 @@
 
 # 所需vscode插件      
     1.vue vscode snippets
+
+# 部分截图
+
+![主页](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/master/static/vueKoa00001.png)
+![分类列表](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/master/static/vueKoa00002.png)
+![购物车](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/master/static/vueKoa00003.png)
+![个人中心](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/master/static/vueKoa00004.png)
 
 
 # 学习步骤

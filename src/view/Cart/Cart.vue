@@ -34,6 +34,7 @@
 <script>
 import { newMoney } from '@/utils/moneyFillter.js'
 export default {
+    name: "Cart",
   data() {
     return {
       cartInfo: [], // 购物车数据
