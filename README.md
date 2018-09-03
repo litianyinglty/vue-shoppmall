@@ -11,9 +11,9 @@
 # 部分截图
 
 ![主页](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/admin/static/vueKoa00001.jpg)
-![分类列表](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/master/static/vueKoa00002.jpg)
-![购物车](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/master/static/vueKoa00003.jpg)
-![个人中心](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/master/static/vueKoa00004.jpg)
+![分类列表](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/admin/static/vueKoa00002.jpg)
+![购物车](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/admin/static/vueKoa00003.jpg)
+![个人中心](https://raw.githubusercontent.com/dj49846917/vue-shoppmall/admin/static/vueKoa00004.jpg)
 
 
 # 学习步骤
